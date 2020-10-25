@@ -38,6 +38,8 @@ ui <- fluidPage(
     
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
+        # Show a plot of the generated distribution
+        
         sidebarPanel(
             helpText("Select the prizes you own/unlocked:"),
             # checkboxInput("code1", "Row 1: Floral Wall Sconce (60 relics)"), 
@@ -78,50 +80,58 @@ ui <- fluidPage(
                       min=0,
                       max = 11,
                       step=1,
-                      width = "100px")) ,
+                      width = "70px")) ,
                      column(5, offset=1, numericInput(inputId="hour_left", 
                       label= "Hours left:", 
                       value=0, 
                       min=0,
                       max=23,
                       step=1,
-                      width = "100px") )), 
+                      width = "70px") )), 
             br(),
             helpText("Enter how many relics and bunnies you currently have:"),
             fluidRow(column(5,
-            numericInput(inputId="relics", 
-                      label= "Relics:", 
-                      value=0,
-                      min=0,
-                      max=4680,
-                      width = "100px") ),
+            numericInput(inputId = "relics", 
+                      label = "Relics:", 
+                      value = 0,
+                      min = 0,
+                      max = 4680,
+                      width = "70px") ),
             
             column(5, offset=1, numericInput(inputId="bunnies", 
                       label= "Bunnies:", 
                       value=0, 
                       min=0,
                       max=1150,
-                      width = "100px"))),
+                      width = "70px"))),
             helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
             
             
-        ),
-
-        # Show a plot of the generated distribution
+        ), 
+        
         mainPanel(
-           #plotOutput("progressPlot"), 
-           textOutput("tokens_needed"),
-           br(),
-           textOutput("rate"),
-           helpText("At the beginning of the event the average rates you needed to collect the tokens were 425.45 relics a day and 104.55 bunnies a day. 
-                    If your average rates above are lower, then you are on a good track to finish the event. 
-                    If your average rates above are higher, then you probably need to focus on collecting these tokens."),
-           br(),
-           img(src='TH_Fright_Night.jpg', height=600), 
-           br(), 
-           #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
-           tagList("This app was created by Yani. If you have any questions or comments, you can contact me on ", a("Twitter", href="https://twitter.com/yani_tsm")
-        ))
+            helpText("During this Treasure Hunt event you need to collect 4680 relics and 1150 bunnies over 11 days. 
+                  Therefore you need to collect on average 425.45 relics a day and 104.55 bunnies a day.
+                  To check your progress in the event, fill out the information in the grey box.  
+                  "),
+            br(),
+            helpText("The numbers below will change according to your entered information."),
+            br(),
+            textOutput("tokens_needed"),
+            br(),
+            textOutput("rate"),
+            #helpText("At the beginning of the event the average rates you needed to collect the tokens were 425.45 relics a day and 104.55 bunnies a day. 
+            #        If your average rates above are lower than 425.45 relics a day and 104.55 bunnies a day, then you are on a good track to finish the event. 
+            #        If your average rates above are higher than these numbers, then you probably need to focus on collecting these tokens."),
+            br(),
+            img(src='TH_Fright_Night.jpg', height=600), 
+            br(),
+            tagList("Infographic Source:", a("simmerdownMAL's Twitter post", href="https://twitter.com/simmerdownMAL/status/1320093413618929664?s=20"),"."),
+            br(), 
+            #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
+            tagList("This app was created by Yani. If you have any questions or comments, you can contact me on ", a("Twitter", href="https://twitter.com/yani_tsm"),".")
+        )
+        
     )
 )
 
@@ -140,7 +150,11 @@ server <- function(input, output) {
         codes <- !(c(input$code1,input$code2, input$code3, input$code4, input$code5, 
                    input$code6,input$code7, input$code8, input$code9, input$code10, 
                    input$code11,input$code12, input$code13, input$code14, input$code15))
-        paste("You still need to collect ", sum(codes*prizes$relic) - input$relics, " relics and ", sum(codes*prizes$bunnies) - input$bunnies, " bunnies.")
+        total_relics <- sum(codes*prizes$relic) - input$relics
+        total_bunnies <- sum(codes*prizes$bunnies) - input$bunnies
+        total_relics <- ifelse( total_relics < 0, "ERROR",  total_relics)
+        total_bunnies  <- ifelse( total_bunnies < 0, "ERROR",  total_bunnies )
+        paste("You still need to collect ", total_relics, " relics and ", total_bunnies , " bunnies.")
     })
     
     output$rate <- renderText({
@@ -150,9 +164,12 @@ server <- function(input, output) {
         
         time_left <- input$day_left + input$hour_left/24
         
-        relics_a_day <- (sum(codes * prizes$relic)- input$relics)/ time_left 
-        bunnies_a_day <- (sum(codes * prizes$bunnies)- input$bunnies)/ time_left
-        paste("To get the Grand prize you need to collect on average ", round(relics_a_day, 2), " relics a day and ", round(bunnies_a_day, 2), " bunnies a day." )
+        relics_a_day <- round((sum(codes * prizes$relic)- input$relics)/ time_left, 2)
+        bunnies_a_day <- round((sum(codes * prizes$bunnies)- input$bunnies)/ time_left, 2)
+        
+        relics_a_day <- ifelse(relics_a_day < 0, "ERROR", relics_a_day)
+        bunnies_a_day   <- ifelse(bunnies_a_day < 0, "ERROR", bunnies_a_day)
+        paste("To get the Grand prize you need to collect on average ", relics_a_day, " relics a day and ", bunnies_a_day, " bunnies a day." )
     })
 }
 
