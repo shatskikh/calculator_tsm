@@ -5,8 +5,8 @@ account: yanitsm
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3089332
-bundleId: 3779169
+bundleId: 3779175
 url: https://yanitsm.shinyapps.io/treasure_hunt/
-when: 1603602255.86146
+when: 1603602456.26223
 asMultiple: FALSE
 asStatic: FALSE
