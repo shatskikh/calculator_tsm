@@ -47,13 +47,13 @@ ui <- fluidPage(
             checkboxInput("code6","Row 2: Wise Wizard's Bookcase (170 relics, 10 bunnies)"), 
             checkboxInput("code7","Row 2: Carved Curio Drawers (250 relics, 65 bunnies)"), 
             checkboxInput("code8","Row 2: Art Nouveau Toilet (250 relics, 65 bunnies)"),
-            checkboxInput("code9","Row 2: Future Sight Crystal Ball(170 relics, 10 bunnies)"), 
-            checkboxInput("code10","Row 3: Apothacary's Cabinet(340 relics, 85 bunnies)"), 
-            checkboxInput("code11","Row 3: Midweek Madness Dress(530 relics, 130 bunnies)"), 
-            checkboxInput("code12","Row 3: Alchemist's Display Case(340 relics, 85 bunnies)"),
-            checkboxInput("code13","Row 4: Pretty As A Peacock Basin(560 relics, 160 bunnies)"), 
-            checkboxInput("code14","Row 4: Carved Curio Wardrobe(560 relics, 160 bunnies)"),
-            checkboxInput("code15","Grand Prize(1000 relics, 320 bunnies)"),
+            checkboxInput("code9","Row 2: Future Sight Crystal Ball (170 relics, 10 bunnies)"), 
+            checkboxInput("code10","Row 3: Apothacary's Cabinet (340 relics, 85 bunnies)"), 
+            checkboxInput("code11","Row 3: Midweek Madness Dress (530 relics, 130 bunnies)"), 
+            checkboxInput("code12","Row 3: Alchemist's Display Case (340 relics, 85 bunnies)"),
+            checkboxInput("code13","Row 4: Pretty As A Peacock Basin (560 relics, 160 bunnies)"), 
+            checkboxInput("code14","Row 4: Carved Curio Wardrobe (560 relics, 160 bunnies)"),
+            checkboxInput("code15","Grand Prize (1000 relics, 320 bunnies)"),
             br(),
             helpText("Enter how much time is left for you to get the tokens:"),
             fluidRow(column(5, numericInput(inputId="day_left", 
@@ -94,12 +94,15 @@ ui <- fluidPage(
         # Show a plot of the generated distribution
         mainPanel(
            #plotOutput("progressPlot"), 
+            
            textOutput("tokens_needed"),
            br(),
            textOutput("rate"),
            helpText("At the beginning of the event the average rates you needed to collect the tokens were 425.45 relics a day and 104.55 bunnies a day. 
                     If your average rates above are lower, then you are on a good track to finish the event. 
-                    If your average rates above are higher, then you probably need to focus on collecting these tokens.")
+                    If your average rates above are higher, then you probably need to focus on collecting these tokens."),
+           br(),
+           img(src='TH_Fright_Night.jpg', height=500)
         )
     )
 )
