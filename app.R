@@ -32,9 +32,10 @@ library(shiny)
 ui <- fluidPage(
 
     # Application title
+    img(src='Yani.png',height=50, align ="right"),
     titlePanel("Treasure Hunt: Fright Night"),
     helpText("This is an interactive app to check your progress in the Treasure Hunt event. "),
-
+    
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
@@ -94,7 +95,6 @@ ui <- fluidPage(
         # Show a plot of the generated distribution
         mainPanel(
            #plotOutput("progressPlot"), 
-            
            textOutput("tokens_needed"),
            br(),
            textOutput("rate"),
