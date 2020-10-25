@@ -1,0 +1,12 @@
+name: treasure_hunt
+title:
+username:
+account: yanitsm
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3089332
+bundleId: 3779131
+url: https://yanitsm.shinyapps.io/treasure_hunt/
+when: 1603600161.68664
+asMultiple: FALSE
+asStatic: FALSE
