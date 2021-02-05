@@ -44,91 +44,6 @@ ui <- fluidPage(
     
     tabsetPanel(
         #
-        #
-        #New Panel: 
-        tabPanel("Treasure Hunt: Winter Wonderland", fluid = TRUE , 
-                 helpText("During this Treasure Hunt event you need to collect 4680 relics and 1150 bunnies over 11 days. 
-                  Therefore you need to collect on average 425.45 relics a day and 104.55 bunnies a day to get the grand prize.
-                  Fill out the information in the grey box to compute the daily average number of tokens.  
-                  "),
-                 
-                 # Sidebar with a slider input for number of bins 
-                 sidebarLayout(
-                     # Show a plot of the generated distribution
-                     
-                     sidebarPanel(
-                         helpText("Select the prizes you own/unlocked:"),
-                         checkboxInput("code1", "Row 1: Lanterns By Candelight"), 
-                         checkboxInput("code2", "Row 1: Celebratory Bulbs"), 
-                         checkboxInput("code3","Row 1: Evergreen Coniferous Tree"),
-                         checkboxInput("code4","Row 1: Stone And Timber Lamp"),
-                         checkboxInput("code5","Row 1: Evergreen Shrub"), 
-                         checkboxInput("code6","Row 2: Wooden Park Bench"), 
-                         checkboxInput("code7","Row 2: Wooden Arch Door"), 
-                         checkboxInput("code8","Row 2: Wooden Arch  Window"),
-                         checkboxInput("code9","Row 2: Wrapped Up Snowfriend"), 
-                         checkboxInput("code10","Row 3: Sweet Snowboarding Jacket"), 
-                         checkboxInput("code11","Row 3: Warm And Comfy Outfit"), 
-                         checkboxInput("code12","Row 3: Stable Soarer Sled"),
-                         checkboxInput("code13","Row 4: Tranquil Timber Arbor"), 
-                         checkboxInput("code14","Row 4: Stone And Timber Gate"),
-                         #checkboxInput("code15","Grand Prize"),
-                         br(),
-                         helpText("Enter how much time is left for you to get the tokens:"),
-                         fluidRow(column(5, numericInput(inputId="day_left", 
-                                                         label= "Days left:", 
-                                                         value=11, 
-                                                         min=0,
-                                                         max = 11,
-                                                         step=1,
-                                                         width = "70px")) ,
-                                  column(5, offset=1, numericInput(inputId="hour_left", 
-                                                                   label= "Hours left:", 
-                                                                   value=0, 
-                                                                   min=0,
-                                                                   max=23,
-                                                                   step=1,
-                                                                   width = "70px") )), 
-                         br(),
-                         helpText("Enter how many relics and bunnies you currently have:"),
-                         fluidRow(column(5,
-                                         numericInput(inputId = "relics", 
-                                                      label = "Relics:", 
-                                                      value = 0,
-                                                      min = 0,
-                                                      max = 4680,
-                                                      width = "70px") ),
-                                  
-                                  column(5, offset=1, numericInput(inputId="bunnies", 
-                                                                   label= "Bunnies:", 
-                                                                   value=0, 
-                                                                   min=0,
-                                                                   max=1150,
-                                                                   width = "70px")))#,
-                         #helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
-                         
-                         
-                     ), 
-                     
-                     mainPanel(
-                         helpText("The numbers below will change according to your entered information."),
-                         br(),
-                         textOutput("tokens_needed"),
-                         br(),
-                         textOutput("rate"),
-                         br(),
-                         helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='TH_Winter_Wonderland.jpg', height=600), 
-                         br(),
-                         tagList("Infographic Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
-                         br(), 
-                         #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
-                         tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
-                     )
-                 )
-        ) 
-        
-        ,
         # Another tab: 
         tabPanel("Sweet Treat Showdown: Charming Gardens", fluid = TRUE, 
                  helpText("During this Sweet Treat Showdown event you need to collect 16800 sweet treats (42 boxes) and 180 royal cookies (18 boxes) over 11 days. 
@@ -207,6 +122,94 @@ ui <- fluidPage(
                      )
                  )
         )
+        ,
+        #
+        #New Panel: 
+        tabPanel("Treasure Hunt: Royal Romance", fluid = TRUE , 
+                 helpText("During this Treasure Hunt event you need to collect 4680 relics and 1150 bunnies over 11 days. 
+                  Therefore you need to collect on average 425.45 relics a day and 104.55 bunnies a day to get the grand prize.
+                  Fill out the information in the grey box to compute the daily average number of tokens.  
+                  "),
+                 
+                 # Sidebar with a slider input for number of bins 
+                 sidebarLayout(
+                     # Show a plot of the generated distribution
+                     
+                     sidebarPanel(
+                         helpText("Select the prizes you own/unlocked:"),
+                         checkboxInput("code1", "Row 1: Captain Rodrigo de Pablo Dining Chair"), 
+                         checkboxInput("code2", "Row 1: Victorian Over-Indulgence Curtains"), 
+                         checkboxInput("code3","Row 1: Large Decorative Urn"),
+                         checkboxInput("code4","Row 1: Party to the Max"),
+                         checkboxInput("code5","Row 1: Regal Reflections Mirror"), 
+                         checkboxInput("code6","Row 2: Punchinello Theater Chandelier"), 
+                         checkboxInput("code7","Row 2: Gilded Floor Shelf"), 
+                         checkboxInput("code8","Row 2: Undersea Traditional Dining Table"),
+                         checkboxInput("code9","Row 2: Gilded Floor Shelf"), 
+                         checkboxInput("code10","Row 3: Ornate Ventana di Longing"), 
+                         checkboxInput("code11","Row 3: Absolutely Marble-ous Estate Gate"), 
+                         checkboxInput("code12","Row 3: Oracular Ornate Fence"),
+                         checkboxInput("code13","Row 4: Brushed Over Fringe"), 
+                         checkboxInput("code14","Row 4: Giotto Queen Bed"),
+                         
+                         #checkboxInput("code15","Grand Prize"),
+                         br(),
+                         helpText("Enter how much time is left for you to get the tokens:"),
+                         fluidRow(column(5, numericInput(inputId="day_left", 
+                                                         label= "Days left:", 
+                                                         value=11, 
+                                                         min=0,
+                                                         max = 11,
+                                                         step=1,
+                                                         width = "70px")) ,
+                                  column(5, offset=1, numericInput(inputId="hour_left", 
+                                                                   label= "Hours left:", 
+                                                                   value=0, 
+                                                                   min=0,
+                                                                   max=23,
+                                                                   step=1,
+                                                                   width = "70px") )), 
+                         br(),
+                         helpText("Enter how many relics and bunnies you currently have:"),
+                         fluidRow(column(5,
+                                         numericInput(inputId = "relics", 
+                                                      label = "Relics:", 
+                                                      value = 0,
+                                                      min = 0,
+                                                      max = 4680,
+                                                      width = "70px") ),
+                                  
+                                  column(5, offset=1, numericInput(inputId="bunnies", 
+                                                                   label= "Bunnies:", 
+                                                                   value=0, 
+                                                                   min=0,
+                                                                   max=1150,
+                                                                   width = "70px")))#,
+                         #helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
+                         
+                         
+                     ), 
+                     
+                     mainPanel(
+                         helpText("The numbers below will change according to your entered information."),
+                         br(),
+                         textOutput("tokens_needed"),
+                         br(),
+                         textOutput("rate"),
+                         br(),
+                         helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
+                         img(src='TH_-_Royal_Romance.jpg', height=600), 
+                         br(),
+                         tagList("Infographic Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
+                         br(), 
+                         #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
+                         tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
+                     )
+                 )
+        ) 
+        
+        
+        
         )
     )
 
