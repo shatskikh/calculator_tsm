@@ -9,24 +9,51 @@
 
 
 
+duration <- 11
+duration_festival <- 50
+
 # TH Fright night
 prizes <- data.frame(relic = numeric(15), bunnies = numeric(15))
-prizes$relic <- c(60, 120, 150, 120, 60, 170, 250, 250, 170, 340, 530, 340, 560, 560, 1000)
-prizes$bunnies <- c(0, 15, 30, 15, 0,10, 65 ,65, 10, 85, 130, 85, 160, 160, 320)
+prizes$relic <- c(50, 120, 200, 120, 50, 150, 250, 250, 150, 360, 380, 360, 520, 520, 750)
+prizes$bunnies <- c(0, 15, 30, 15, 0,35, 70 ,70, 35, 75, 150, 75, 140, 140, 300)
 prizes$id <- seq(1,15)
 
 
 # STS: Treatsylvania
-price_per_sweet <- 400
-price_per_royal <- 10
-max_sweets <- 42
-max_royal <- 18
+#price_per_sweet <- 400
+#price_per_royal <- 10
+#max_sweets <- 42
+#max_royal <- 18
 
 # # STS: Treatsylvania
-# price_per_sweet <- 300
-# price_per_royal <- 7
-# max_sweets <- 58
-# max_royal <- 24
+ price_per_sweet <- 300
+ price_per_royal <- 7
+ max_sweets <- 52
+ max_royal <- 24
+ 
+ 
+# Season Festival 
+tier <- seq(1,60)
+pink_tickets <- c(0,200,240,270,300,330,360,390,420,450,480,500,510,520,530,540,560,570,580,590,610,620,630,640,660,670,680,700,710,730,740,750,770,780,800,810,830, 840,860,870,890,900,920,930,940,950, 950,960, 970,970,970,980,980,980,990,990,990, 1000,1000,1000)
+
+seasontasks<-c(3650, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               1750, 0, 0,
+               2000, 0, 0,
+               0 , 0)
+day <- c(49:0)[seasontasks != 0]
 
 library(shiny)
 library(shinyTree)
@@ -43,11 +70,12 @@ ui <- fluidPage(
     
     
     tabsetPanel(
-        #
+       
+        
         # Another tab: 
-        tabPanel("Sweet Treat Showdown: Charming Gardens", fluid = TRUE, 
-                 helpText("During this Sweet Treat Showdown event you need to collect 16800 sweet treats (42 boxes) and 180 royal cookies (18 boxes) over 11 days. 
-                  Therefore you need to collect on average  1527.27 sweet treats a day and 16.36 royal cookies a day to get the grand prize.
+        tabPanel("Sweet Treat Showdown: Country Living (Rerun)", fluid = TRUE, 
+                 helpText("During this Sweet Treat Showdown event you need to collect 15600 sweet treats (52 boxes) and 168 royal cookies (24 boxes) over 11 days. 
+                  Therefore you need to collect on average  1418.18 sweet treats a day and 15.27  royal cookies a day to get the grand prize.
                   Fill out the information in the grey box to compute the daily average number of tokens based on your progress in the event.  
                   "),
                  sidebarLayout(
@@ -57,7 +85,7 @@ ui <- fluidPage(
                          helpText("Enter how much time is left for you to get the tokens:"),
                          fluidRow(column(5, numericInput(inputId="day_left_sts", 
                                                          label= "Days left:", 
-                                                         value=11,min=0,max = 11,step=1,width = "70px")) ,
+                                                         value= duration, min=0,max = duration, step=1,width = "70px")) ,
                                   column(5, offset=1, numericInput(inputId="hour_left_sts", 
                                                                    label= "Hours left:", 
                                                                    value=0, 
@@ -104,6 +132,8 @@ ui <- fluidPage(
                      mainPanel(
                          helpText("The numbers below will change according to your entered information."),
                          br(),
+                         textOutput("time_passed_sts"),
+                         br(),
                          textOutput("tokens_needed_sts"),
                          br(),
                          textOutput("rate_sts"),
@@ -113,21 +143,22 @@ ui <- fluidPage(
                          br(),
                          helpText("Here is more information about the event:"),
                          #helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='STS_Charming_Crafts.jpg', height=600), 
+                         img(src='jg9vy41flfg71.png', height=600), 
                          br(),
-                         tagList("Infographic Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                         #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                         tagList("Infographic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
                          br(), 
                          #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
                          tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
                      )
                  )
-        )
+        )# end of tabPanel
         ,
-        #
+        
         #New Panel: 
-        tabPanel("Treasure Hunt: Royal Romance", fluid = TRUE , 
-                 helpText("During this Treasure Hunt event you need to collect 4680 relics and 1150 bunnies over 11 days. 
-                  Therefore you need to collect on average 425.45 relics a day and 104.55 bunnies a day to get the grand prize.
+        tabPanel("Treasure Hunt: Beach Retreat ", fluid = TRUE , 
+                 helpText("During this Treasure Hunt event you need to collect 4230 relics and 1150 bunnies over 11 days. 
+                  Therefore you need to collect on average  384.55 relics a day and 104.55  bunnies a day to get the grand prize.
                   Fill out the information in the grey box to compute the daily average number of tokens.  
                   "),
                  
@@ -137,32 +168,32 @@ ui <- fluidPage(
                      
                      sidebarPanel(
                          helpText("Select the prizes you own/unlocked:"),
-                         checkboxInput("code1", "Row 1: Captain Rodrigo de Pablo Dining Chair"), 
-                         checkboxInput("code2", "Row 1: Victorian Over-Indulgence Curtains"), 
-                         checkboxInput("code3","Row 1: Large Decorative Urn"),
-                         checkboxInput("code4","Row 1: Party to the Max"),
-                         checkboxInput("code5","Row 1: Regal Reflections Mirror"), 
-                         checkboxInput("code6","Row 2: Punchinello Theater Chandelier"), 
-                         checkboxInput("code7","Row 2: Gilded Floor Shelf"), 
-                         checkboxInput("code8","Row 2: Undersea Traditional Dining Table"),
-                         checkboxInput("code9","Row 2: Gilded Floor Shelf"), 
-                         checkboxInput("code10","Row 3: Ornate Ventana di Longing"), 
-                         checkboxInput("code11","Row 3: Absolutely Marble-ous Estate Gate"), 
-                         checkboxInput("code12","Row 3: Oracular Ornate Fence"),
-                         checkboxInput("code13","Row 4: Brushed Over Fringe"), 
-                         checkboxInput("code14","Row 4: Giotto Queen Bed"),
+                         checkboxInput("code1", "Row 1: Breezy Boho Sofa"), 
+                         checkboxInput("code2", "Row 1: 'Breeze Through' Small Window"), 
+                         checkboxInput("code3","Row 1: Plumeria's Plumed Skirt"),
+                         checkboxInput("code4","Row 1: So, Yacht? Painting"),
+                         checkboxInput("code5","Row 1: Sanded Down Dining Table"), 
+                         checkboxInput("code6","Row 2: Basic Beach Sheer Top"), 
+                         checkboxInput("code7","Row 2: Tropical Flora Shirt"), 
+                         checkboxInput("code8","Row 2: Step Up Shelf"),
+                         checkboxInput("code9","Row 2: Draped Dreams Divider"), 
+                         checkboxInput("code10","Row 3: Wooden Throne Toilet"), 
+                         checkboxInput("code11","Row 3: Llama Lagoon's Lava Sink"), 
+                         checkboxInput("code12","Row 3: Beach Bronzed Sandals"),
+                         checkboxInput("code13","Row 4: 'Shack Attack' Bar"), 
+                         checkboxInput("code14","Row 4: Glorious Gauze Bed"),
                          
                          #checkboxInput("code15","Grand Prize"),
                          br(),
                          helpText("Enter how much time is left for you to get the tokens:"),
-                         fluidRow(column(5, numericInput(inputId="day_left", 
+                         fluidRow(column(5, numericInput(inputId="day_left_th", 
                                                          label= "Days left:", 
-                                                         value=11, 
+                                                         value=duration, 
                                                          min=0,
-                                                         max = 11,
+                                                         max = duration,
                                                          step=1,
                                                          width = "70px")) ,
-                                  column(5, offset=1, numericInput(inputId="hour_left", 
+                                  column(5, offset=1, numericInput(inputId="hour_left_th", 
                                                                    label= "Hours left:", 
                                                                    value=0, 
                                                                    min=0,
@@ -193,20 +224,116 @@ ui <- fluidPage(
                      mainPanel(
                          helpText("The numbers below will change according to your entered information."),
                          br(),
+                         textOutput("time_passed_th"),
+                         br(),
                          textOutput("tokens_needed"),
                          br(),
                          textOutput("rate"),
                          br(),
                          helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='TH_-_Royal_Romance.jpg', height=600), 
+                         img(src='65n9di0elfg71.png', width=400), 
                          br(),
-                         tagList("Infographic Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
+                         #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                         tagList("Inforgraphic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
+                         br(),
+                         helpText("Resources table for Treasure Hunt to help you to plan ahead:"),
+                         img(src='TH_-_table.png',  width=400), 
+                         br(),
+                         tagList("Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
                          br(), 
                          #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
                          tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
                      )
                  )
-        ) 
+        )  # end of tabPanel
+        
+        
+        
+        , 
+        # #New Panel: 
+         tabPanel("Season Festival", fluid = TRUE , 
+                 helpText("To unlock all tiers a player needs to collect 42300 prize tickets. Therefore you need to collect on average  846 prize tickets a day to unlock all tiers in timely manner.
+                 Below you can check your progress in the festival and plan out how many tickets a day you still need to collect.
+                  "),
+
+                 # Sidebar with a slider input for number of bins
+                 sidebarLayout(
+                     # Show a plot of the generated distribution
+
+                     sidebarPanel(
+                         helpText("Select the tier you are currently working towards and how many tickets you collected for this tier:"),
+
+
+                     fluidRow(column(5,  numericInput(inputId="current_tier",
+                                                               label= "Current Tier:",
+                                                               value=1,
+                                                               min=0,
+                                                               max = 60,
+                                                               step=1,
+                                                               width = "70px")),
+                              column(5,offset=1, numericInput(inputId = "current_prizeticket",
+                                                  label = "Prize Tickets:",
+                                                  value = 0,
+                                                  min = 0,
+                                                  max = 1000,
+                                                  width = "70px") )),
+
+                         #checkboxInput("code15","Grand Prize"),
+                         br(),
+                         helpText("Enter the time when Sim Festival ends in"),
+                         fluidRow(column(5, numericInput(inputId="day_left_f",
+                                                         label= "Days left:",
+                                                         value= duration_festival,
+                                                         min=0,
+                                                         max = duration_festival,
+                                                         step=1,
+                                                         width = "70px")) ,
+                                  column(5, offset=1, numericInput(inputId="hour_left_f",
+                                                                   label= "Hours left:",
+                                                                   value=0,
+                                                                   min=0,
+                                                                   max=23,
+                                                                   step=1,
+                                                                   width = "70px") ))
+
+
+                         #helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
+
+
+                     ),
+
+                     mainPanel(
+                         helpText("The numbers below will change according to your entered information."),
+                         br(),
+                         textOutput("time_passed_fest"),
+                         br(),
+                         textOutput("prizetickets_needed"),
+                         br(),
+                         textOutput("predictions"),
+                         br(),
+                         #helpText("Remember that you receive 550 prize tickets for completing daily tasks and at least 500 for completing each seasonal task (you get 3 seasonal tasks every 3 days)
+                         #         Additional prize tickets can be received by completing the season tasks which are being added every 3 days."),
+                         img(src='y2x7trra2zg71.jpg', height=600), 
+                         br(),
+                         #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                         tagList("Infographic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
+                         br(),
+                         tagList("Huge THANKS to ", a("Game Changer SimmerdownMAL", href="https://twitter.com/simmerdownMAL")," for the provided numbers of prize tickets for the tiers."),
+                         br(),
+                         #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
+                         tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
+                     )
+                 )
+        )  # end of tabPanel
+
+        #
+
+        #
+
+        #
+        
+        
+        
         
         
         
@@ -218,8 +345,25 @@ ui <- fluidPage(
 # Define server logic:
 server <- function(input, output) {
     
-    output$check <- renderText({ 
-        "You have selected this"
+    output$time_passed_sts <- renderText({
+        time_left <- input$day_left_sts + input$hour_left_sts/24
+        prop_left <- round(time_left/duration *100, 2)
+        paste("Proportion of time left: ", prop_left , "%")
+        
+    })
+    
+    output$time_passed_th <- renderText({
+        time_left <- input$day_left_th + input$hour_left_th/24
+        prop_left <- round(time_left/duration *100, 2)
+        paste("Proportion of time left: ", prop_left , "%")
+        
+    })
+    
+    output$time_passed_fest <- renderText({
+        time_left <- input$day_left_f + input$hour_left_f/24
+        prop_left <- round(time_left/duration_festival *100, 2)
+        paste("Proportion of time left: ", prop_left , "%")
+        
     })
     
     output$tokens_needed_sts <- renderText({
@@ -227,7 +371,10 @@ server <- function(input, output) {
         total_bunnies <- input$royal_boxes*price_per_royal - input$royal_cookies
         total_relics <- ifelse( total_relics < 0, "ERROR",  total_relics)
         total_bunnies  <- ifelse( total_bunnies < 0, "ERROR",  total_bunnies )
-        paste("You still need to collect ", total_relics, " sweet treats and ", total_bunnies , " royal cookies.")
+        
+        perc_relics <- round(total_relics/(max_sweets*price_per_sweet)*100, 2)
+        perc_bunnies <- round(total_bunnies/(max_royal*price_per_royal)*100, 2)
+        paste("You still need to collect ", total_relics, " sweet treats (",perc_relics,"% of all sweet treats) and ", total_bunnies , " royal cookies ( ",perc_bunnies ,"% of all royal cookies).")
     })
     
     output$rate_sts <- renderText({
@@ -251,7 +398,13 @@ server <- function(input, output) {
         total_bunnies <- sum(codes*prizes$bunnies) - input$bunnies
         total_relics <- ifelse( total_relics < 0, "ERROR",  total_relics)
         total_bunnies  <- ifelse( total_bunnies < 0, "ERROR",  total_bunnies )
-        paste("You still need to collect ", total_relics, " relics and ", total_bunnies , " bunnies.")
+        
+        perc_relics <- round(total_relics/sum(prizes$relic)*100, 2)
+        perc_bunnies <- round(total_bunnies/sum(prizes$bunnies)*100, 2)
+        
+        #paste("You still need to collect ", total_relics, " relics and ", total_bunnies , " bunnies.")
+        paste("You still need to collect ", total_relics, " relics (",perc_relics,"% of all relics) and ", total_bunnies , " bunnies ( ",perc_bunnies ,"% of all bunnies).")
+        
     })
     
     output$rate <- renderText({
@@ -259,7 +412,7 @@ server <- function(input, output) {
                      input$code6,input$code7, input$code8, input$code9, input$code10, 
                      input$code11,input$code12, input$code13, input$code14, FALSE))
         
-        time_left <- input$day_left + input$hour_left/24
+        time_left <- input$day_left_th + input$hour_left_th/24
         
         relics_a_day <- round((sum(codes * prizes$relic)- input$relics)/ time_left, 2)
         bunnies_a_day <- round((sum(codes * prizes$bunnies)- input$bunnies)/ time_left, 2)
@@ -267,6 +420,30 @@ server <- function(input, output) {
         relics_a_day <- ifelse(relics_a_day < 0, "ERROR", relics_a_day)
         bunnies_a_day   <- ifelse(bunnies_a_day < 0, "ERROR", bunnies_a_day)
         paste("To get the Grand prize you need to collect on average ", relics_a_day, " relics a day and ", bunnies_a_day, " bunnies a day." )
+    })
+    
+
+    
+    output$prizetickets_needed <- renderText({
+        time_left <- input$day_left_f + input$hour_left_f/24
+        
+        prizetickets_to_collect <- sum(pink_tickets[input$current_tier:60]) - input$current_prizeticket
+        prizetickets_a_day <- round(prizetickets_to_collect/ time_left, 2)
+        prop_prizetickets <- round((sum(pink_tickets)-prizetickets_to_collect)/sum(pink_tickets) *100,2)
+        
+        prizetickets_a_day <- ifelse(prizetickets_a_day < 0, "ERROR", prizetickets_a_day)
+        
+        paste("You have collected ", prop_prizetickets, "% of all prize tickets in this season. 
+              To unlock all tiers you still need to collect ", prizetickets_to_collect , " prize tickets." )
+        
+    })
+    
+    output$predictions <- renderText({
+        futuredailytickets <- 550 * input$day_left_f
+        futureseason <- sum(seasontasks[(duration_festival - input$day_left_f):duration_festival])
+        total <- futuredailytickets + futureseason
+        paste("If you do all future assigned daily tasks, you will get ", futuredailytickets, " prize tickets. 
+              If you do all future assigned season tasks, you will get ",  futureseason, "prize tickets. Therefore, the total is ", total, "prize tickets." )
     })
 }
 
