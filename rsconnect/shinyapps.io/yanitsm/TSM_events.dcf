@@ -5,9 +5,9 @@ account: yanitsm
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3218752
-bundleId: 4082959
+bundleId: 5021866
 url: https://yanitsm.shinyapps.io/TSM_events/
-when: 1610386817.30227
+when: 1631324564.32063
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: app2.R|listtree/app.R|sts/app.R|tree/app.R
