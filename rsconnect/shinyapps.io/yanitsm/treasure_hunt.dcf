@@ -1,12 +1,13 @@
 name: treasure_hunt
-title:
+title: treasure_hunt
 username:
 account: yanitsm
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3089332
-bundleId: 3779251
+bundleId: 4033111
 url: https://yanitsm.shinyapps.io/treasure_hunt/
-when: 1603605526.49006
+when: 1609090991.20018
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: app2.R|listtree/app.R|sts/app.R|tree/app.R
