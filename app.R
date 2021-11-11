@@ -15,27 +15,27 @@ duration_festival <- 50
 # TH Fright night
 prizes <- data.frame(relic = numeric(15), bunnies = numeric(15))
 #Rerun:
-prizes$relic <- c(60, 120, 150, 120, 60, 
-                  170, 250, 250, 170, 
-                  340, 530, 340, 
-                  560, 560, 
-                  1000)
-prizes$bunnies <- c(0, 15, 30, 15, 0, 
-                    10, 65, 65, 10, 
-                    85, 130, 85, 
-                    160, 160, 
-                    320)
+# prizes$relic <- c(60, 120, 150, 120, 60, 
+#                   170, 250, 250, 170, 
+#                   340, 530, 340, 
+#                   560, 560, 
+#                   1000)
+# prizes$bunnies <- c(0, 15, 30, 15, 0, 
+#                     10, 65, 65, 10, 
+#                     85, 130, 85, 
+#                     160, 160, 
+#                     320)
 # #New:
-# prizes$relic <- c(50, 120, 200, 120, 50, 
-#                   150, 250, 250, 150, 
-#                   360, 380, 360, 
-#                   520, 520, 
-#                   750)
-# prizes$bunnies <- c(0, 15, 30, 15, 0,
-#                     35, 70 ,70, 35, 
-#                     75, 150, 75, 
-#                     140, 140, 
-#                     300)
+prizes$relic <- c(50, 120, 200, 120, 50,
+                  150, 250, 250, 150,
+                  360, 380, 360,
+                  520, 520,
+                  750)
+prizes$bunnies <- c(0, 15, 30, 15, 0,
+                    35, 70 ,70, 35,
+                    75, 150, 75,
+                    140, 140,
+                    300)
 prizes$id <- seq(1,15)
 
 
@@ -48,8 +48,8 @@ prizes$id <- seq(1,15)
 # # STS: Treatsylvania
  price_per_sweet <- 300
  price_per_royal <- 7
- max_sweets <- 58
- max_royal <- 24
+ max_sweets <- 42
+ max_royal <- 18
  
  
 # Season Festival 
@@ -98,10 +98,16 @@ ui <- fluidPage(
     
     
     tabsetPanel(
+        
+       
+        
+        
+        
+        
         #New Panel: 
-        tabPanel("Treasure Hunt: Fright Night (Rerun)", fluid = TRUE , 
-                 helpText("During this Treasure Hunt event you need to collect 4680 relics and 1150 bunnies over 11 days. 
-                  Therefore you need to collect on average  425.45 relics a day and 104.55  bunnies a day to get the grand prize.
+        tabPanel("Treasure Hunt: Spice Spice Baby", fluid = TRUE , 
+                 helpText("During this Treasure Hunt event you need to collect 4230 relics and 1150 bunnies over 11 days. 
+                  Therefore you need to collect on average  384.55 relics a day and 104.55  bunnies a day to get the grand prize.
                   Fill out the information in the grey box to compute the daily average number of tokens.  
                   "),
                  
@@ -111,20 +117,20 @@ ui <- fluidPage(
                      
                      sidebarPanel(
                          helpText("Select the prizes you own/unlocked:"),
-                         checkboxInput("code1", "Row 1: Floral Wall Sconce"), 
-                         checkboxInput("code2", "Row 1: Twisted Woods Mirror"), 
-                         checkboxInput("code3","Row 1: Lunar Phase Painting"),
-                         checkboxInput("code4","Row 1: High Backed Dining Chair"),
-                         checkboxInput("code5","Row 1: Carved Curio Table"), 
-                         checkboxInput("code6","Row 2: Wise Wizard's Bookcase"), 
-                         checkboxInput("code7","Row 2: Carved Curio Drawers"), 
-                         checkboxInput("code8","Row 2: Art Nouveau Toilet"),
-                         checkboxInput("code9","Row 2: Future Sight Crystal Ball"), 
-                         checkboxInput("code10","Row 3: Apothacary's Cabinet"), 
-                         checkboxInput("code11","Row 3: Midweek Madness Dress"), 
-                         checkboxInput("code12","Row 3: Alchemist's Display"),
-                         checkboxInput("code13","Row 4: Pretty As A Peacock Basin"), 
-                         checkboxInput("code14","Row 4: Carved Curio Wardrobe"),
+                         checkboxInput("code1", "Row 1: Modern Vertical Planters"), 
+                         checkboxInput("code2", "Row 1: Lil' Grim Mini Toy"), 
+                         checkboxInput("code3","Row 1: Commit to Knit' Yarn Basket"),
+                         checkboxInput("code4","Row 1: Tailgate Barbecue' Cuffed Pants"),
+                         checkboxInput("code5","Row 1: Even Jocks need Comfy Socks"), 
+                         checkboxInput("code6","Row 2: Square Peg' Shelf"), 
+                         checkboxInput("code7","Row 2: Knitted Tushie Cosy"), 
+                         checkboxInput("code8","Row 2: Buckle Up and Harvest' Fall Boots"),
+                         checkboxInput("code9","Row 2: Fall Haul Trifted Knits"), 
+                         checkboxInput("code10","Row 3: Graceful Tasteful Crafts table"), 
+                         checkboxInput("code11","Row 3: Thou Wood Not End Table"), 
+                         checkboxInput("code12","Row 3: Beaver Moon Sweater"),
+                         checkboxInput("code13","Row 4: Pumpkin Spice and Everything Nice' dress"), 
+                         checkboxInput("code14","Row 4: Classic Pompadour"),
                          
                          #checkboxInput("code15","Grand Prize"),
                          br(),
@@ -176,7 +182,7 @@ ui <- fluidPage(
                          textOutput("walkie_talkies_count"),
                          br(),
                          helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='bbpp3r51c5s71.jpg', width=400), 
+                         img(src='SpiceSpiceBaby_TH.jpg', width=400), 
                          br(),
                          #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
                          tagList("Inforgraphic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
@@ -195,12 +201,11 @@ ui <- fluidPage(
         
         
         , 
-       
         
         # Another tab: 
-        tabPanel("Sweet Treat Showdown: Treatsylvania Returns (Rerun)", fluid = TRUE, 
-                 helpText("During this Sweet Treat Showdown event you need to collect 17400 sweet treats (58 boxes) and 168 royal cookies (24 boxes) over 11 days. 
-                  Therefore you need to collect on average  1581.82  sweet treats a day and 15.27  royal cookies a day to get the grand prize.
+        tabPanel("Sweet Treat Showdown: Cozier Home (Rerun)", fluid = TRUE, 
+                 helpText("During this Sweet Treat Showdown event you need to collect 12600 sweet treats (42 boxes) and 126 royal cookies (18 boxes) over 11 days. 
+                  Therefore you need to collect on average  1145.45  sweet treats a day and 11.45  royal cookies a day to get the grand prize.
                   Fill out the information in the grey box to compute the daily average number of tokens based on your progress in the event.  
                   "),
                  sidebarLayout(
@@ -270,7 +275,7 @@ ui <- fluidPage(
                          br(),
                          helpText("Here is more information about the event:"),
                          #helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='5xutir03c5s71.jpg', height=600), 
+                         img(src='CosyHome_STS.jpg', height=600), 
                          br(),
                          tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
                          #tagList("Infographic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
@@ -281,8 +286,6 @@ ui <- fluidPage(
                  )
         )# end of tabPanel
         ,
-        
-        
         
         
         # #New Panel: 

@@ -1,0 +1,12 @@
+name: fest
+title: fest
+username:
+account: yanitsm
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4067114
+bundleId: 4547868
+url: https://yanitsm.shinyapps.io/fest/
+when: 1619994930.04287
+asMultiple: FALSE
+asStatic: FALSE
