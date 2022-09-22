@@ -9,10 +9,10 @@
 
 
 
-duration <- 11
-duration_festival <- 60
+#event duration:
+duration <- 11 
 
-# TH Fright night
+# TH: ----
 prizes <- data.frame(relic = numeric(15), bunnies = numeric(15))
 #Rerun:
 # prizes$relic <- c(60, 120, 150, 120, 60, 
@@ -39,21 +39,25 @@ prizes$bunnies <- c(0, 15, 30, 15, 0,
 prizes$id <- seq(1,15)
 
 
-# STS: Treatsylvania
-#price_per_sweet <- 400
-#price_per_royal <- 10
-#max_sweets <- 42
-#max_royal <- 18
+# STS: ----
+# New STS:
+# price_per_sweet <- 400
+# price_per_royal <- 10
+# max_sweets <- 48
+# max_royal <- 18
 
-# # Rerun STS
+# # # Rerun STS
  price_per_sweet <- 300
  price_per_royal <- 7
- max_sweets <- 60
+ max_sweets <- 48
  max_royal <- 24
+
+  
  
- 
-# Season Festival 
-tier <- seq(1,60)
+# Season Festival: ----
+ #festival duration:
+duration_festival <- 60
+tier <- seq(1,70)
 pink_tickets <- c(0,200,240,270,300,330,360,390,420,450,
                   480,500,510,520,530,540,560,570,580,590,
                   610,620,630,640,660,670,680,700,710,730,
@@ -80,11 +84,58 @@ seasontasks<-c(3650, 0, 0,
                0 , 0)
 day <- c(59:0)[seasontasks != 0]
 
+
+
+# Database: ----
 library(shiny)
 library(shinyTree)
+library(RSQLite)
+
+saveData <- function(data) {
+  sqlitepath <- "/Users/Katya/Documents/treasure_hunt/mydb"
+  table <- "user_data"
+  
+  
+  # Connect to the database
+  db <- dbConnect(SQLite(), sqlitepath, dbname = "users")
+  # Construct the update query by looping over the data fields
+  query <- sprintf(
+    "INSERT INTO %s (%s) VALUES ('%s')",
+    table, 
+    paste(names(data), collapse = ", "),
+    paste(data, collapse = "', '")
+  )
+  # Submit the update query and disconnect
+  dbGetQuery(db, query)
+  dbDisconnect(db)
+}
+
+loadData <- function() {
+  sqlitepath <- "/Users/Katya/Documents/treasure_hunt/mydb"
+  table <- "user_data"
+  
+  # Connect to the database
+  db <- dbConnect(SQLite(), sqlitepath, dbname = "users")
+  # Construct the fetching query
+  query <- sprintf("SELECT * FROM %s", table)
+  # Submit the fetch query and disconnect
+  data <- dbGetQuery(db, query)
+  dbDisconnect(db)
+  data
+}
 
 
-# Define UI for application that draws a histogram
+fields <- c("user",
+            "day_left_sts",
+            "hour_left_sts",
+            "sweet_boxes",
+            "royal_boxes",
+            "sweet_treats",
+            "royal_cookies")
+
+
+
+# Shiny app UI: ----
 ui <- fluidPage(
     tags$head(includeHTML(("google-analytics.html"))),
     
@@ -92,48 +143,52 @@ ui <- fluidPage(
     img(src='Yani.png',height=50, align ="right"),
     img(src='SaveTheSimsMobile.jpeg',height=50, align ="right"),
     #a(imageOutput("SaveTheSimsMobile.jpeg"), href="https://www.google.com"),
+    
     titlePanel("The Sims Mobile: Event Calculator"),
     helpText("This is an interactive app to check your progress in the The Sims Mobile's events. "),
     tagList("If you feel the game became boring and repetive with all the reruns and no new content, please support", a("#SaveTheSimsMobile", href="https://twitter.com/hashtag/SaveTheSimsMobile?src=hashtag_click"), "."),
     
+    textInput("user", "Username", ""),
+    actionButton("load", "Load"),
+    
     
     tabsetPanel(
         
-       
         
-        # Another tab: 
-        tabPanel("Sweet Treat Showdown: Sweet Holiday (Rerun)", fluid = TRUE, 
-                 helpText("During this Sweet Treat Showdown event you need to collect 18000 sweet treats (60 boxes) and 168 royal cookies (24 boxes) over 11 days. 
-                  Therefore you need to collect on average  1636.36  sweet treats a day and 15.27  royal cookies a day to get the grand prize.
-                  Fill out the information in the grey box to compute the daily average number of tokens based on your progress in the event.  
+        # Another tab:
+        tabPanel("Sweet Treat Showdown: Foxburry Institute (Rerun)", fluid = TRUE,
+                 helpText("For those players who work on the bonus STS, I am working on the calculator for you. Stay tuned! "),
+                 helpText("During this Sweet Treat Showdown event you need to collect 14400 sweet treats (48 boxes) and 168 royal cookies (24 boxes) over 11 days.
+                  Therefore you need to collect on average  1309.09  sweet treats a day and 15.27  royal cookies a day to get the grand prize.
+                  Fill out the information in the grey box to compute the daily average number of tokens based on your progress in the event.
                   "),
                  sidebarLayout(
                      # Show a plot of the generated distribution
                      
                      sidebarPanel(
                          helpText("Enter how much time is left for you to get the tokens:"),
-                         fluidRow(column(5, numericInput(inputId="day_left_sts", 
-                                                         label= "Days left:", 
+                         fluidRow(column(5, numericInput(inputId="day_left_sts",
+                                                         label= "Days left:",
                                                          value= duration, min=0,max = duration, step=1,width = "70px")) ,
-                                  column(5, offset=1, numericInput(inputId="hour_left_sts", 
-                                                                   label= "Hours left:", 
-                                                                   value=0, 
+                                  column(5, offset=1, numericInput(inputId="hour_left_sts",
+                                                                   label= "Hours left:",
+                                                                   value=0,
                                                                    min=0,
                                                                    max=23,
                                                                    step=1,
-                                                                   width = "70px") )), 
+                                                                   width = "70px") )),
                          br(),
                          helpText("Select the number of boxes you have left to open:"),
-                         fluidRow(column(5, numericInput(inputId="sweet_boxes", 
-                                                         label= "Sweet Boxes:", 
-                                                         value=max_sweets, 
+                         fluidRow(column(5, numericInput(inputId="sweet_boxes",
+                                                         label= "Sweet Boxes:",
+                                                         value=max_sweets,
                                                          min=0,
                                                          max = max_sweets,
                                                          step=1,
                                                          width = "70px")) ,
-                                  column(5, offset=1, numericInput(inputId="royal_boxes", 
-                                                                   label= "Royal Boxes:", 
-                                                                   value=max_royal, 
+                                  column(5, offset=1, numericInput(inputId="royal_boxes",
+                                                                   label= "Royal Boxes:",
+                                                                   value=max_royal,
                                                                    min=0,
                                                                    max=max_royal,
                                                                    step=1,
@@ -142,21 +197,22 @@ ui <- fluidPage(
                          
                          helpText("Enter how many sweet treats and royal cookies you currently have:"),
                          fluidRow(column(5,
-                                         numericInput(inputId = "sweet_treats", 
-                                                      label = "Sweet Treats:", 
+                                         numericInput(inputId = "sweet_treats",
+                                                      label = "Sweet Treats:",
                                                       value = 0,
                                                       min = 0,
                                                       max = max_sweets*price_per_sweet,
                                                       width = "70px") ),
                                   
-                                  column(5, offset=1, numericInput(inputId="royal_cookies", 
-                                                                   label= "Royal Cookies:", 
-                                                                   value=0, 
+                                  column(5, offset=1, numericInput(inputId="royal_cookies",
+                                                                   label= "Royal Cookies:",
+                                                                   value=0,
                                                                    min=0,
                                                                    max=max_royal*price_per_royal,
-                                                                   width = "70px")))#,
+                                                                   width = "70px"))),
                          
-                     ), 
+                         actionButton("submit", "Save")
+                         ),
                      
                      mainPanel(
                          helpText("The numbers below will change according to your entered information."),
@@ -168,17 +224,20 @@ ui <- fluidPage(
                          textOutput("rate_sts"),
                          br(),
                          textOutput("challenges_count"),
-                         #helpText("At the beginning of the event the average rates you needed to collect the tokens were 1418.18 sweet treats a day and 19.09 royal cookies a day. 
-                         #        If your average rates above are lower than 1418.18 sweet treats a day and 19.09 royal cookies a day, then you are on a good track to finish the event. 
+                         #helpText("At the beginning of the event the average rates you needed to collect the tokens were 1418.18 sweet treats a day and 19.09 royal cookies a day.
+                         #        If your average rates above are lower than 1418.18 sweet treats a day and 19.09 royal cookies a day, then you are on a good track to finish the event.
                          #        If your average rates above are higher than these numbers, then you probably need to focus on collecting these tokens."),
                          br(),
-                         helpText("Here is more information about the event from last year. Unfortunately I was unable to find the recent graphic, so there might be changes in the event:"),
-                         #helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='STS_SweetHoliday.png', height=600), 
+                         #helpText("Here is more information about the event from the previous time this event was running:"),
+                         helpText("Here is more information about the event:"),
+                         img(src='STS_FoxburyInstitute.jpg', height=400),
+                         #img(src='Charming-gardens-STS-rerun_2.png', height=400),
                          br(),
-                         tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                         #tagList("Infographic Source:", a("SimmerdownMal's Reddit Post", href="https://www.reddit.com/r/SimsMobile/comments/ratqr7/updated_the_sweet_holiday_sweet_treat_showdown/"),"."),
+                         #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
                          #tagList("Infographic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
-                         br(), 
+                         tagList("Infographic Source:", a("TheGirlWhoGames's website", href="https://thegirlwhogames.blog/2022/07/15/the-sims-mobile-jungle-rush-update/"),"."),
+                         br(),
                          #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
                          tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
                      )
@@ -187,8 +246,9 @@ ui <- fluidPage(
         ,
         
         
+        
         #New Panel: 
-        tabPanel("Treasure Hunt: New Year's Dock and Roll", fluid = TRUE , 
+        tabPanel("Treasure Hunt: Hallways Ready", fluid = TRUE , 
                  helpText("During this Treasure Hunt event you need to collect 4230 relics and 1150 bunnies over 11 days. 
                   Therefore you need to collect on average  384.55 relics a day and 104.55  bunnies a day to get the grand prize.
                   Fill out the information in the grey box to compute the daily average number of tokens.  
@@ -196,97 +256,100 @@ ui <- fluidPage(
                  
                  # Sidebar with a slider input for number of bins 
                  sidebarLayout(
-                     # Show a plot of the generated distribution
+                   # Show a plot of the generated distribution
+                   
+                   sidebarPanel(
+                     helpText("Select the prizes you own/unlocked:"),
+                     checkboxInput("code1", "Row 1: Fenced Plant Pots"), 
+                     checkboxInput("code2", "Row 1: Science Club Banner"), 
+                     checkboxInput("code3","Row 1: Computer Lab Chair"),
+                     checkboxInput("code4","Row 1: Computer Lab Table"),
+                     checkboxInput("code5","Row 1: Smart Accented Polo"), 
+                     checkboxInput("code6","Row 2: School Library Bookshelf"), 
+                     checkboxInput("code7","Row 2: Head Teacher’s Desk"), 
+                     checkboxInput("code8","Row 2: It Has Pockets!’ Skirt"),
+                     checkboxInput("code9","Row 2: Cushy Inheritance Top"), 
+                     checkboxInput("code10","Row 3: Dorm Single Bed with Storage"), 
+                     checkboxInput("code11","Row 3: One-piece College Sofa"), 
+                     checkboxInput("code12","Row 3: Status Symbol Jacket"),
+                     checkboxInput("code13","Row 4: Extra Curricular Board"), 
+                     checkboxInput("code14","Row 4: Bloom Shirt Pinafore"),
                      
-                     sidebarPanel(
-                         helpText("Select the prizes you own/unlocked:"),
-                         checkboxInput("code1", "Row 1: Steer Free of Drama' Decor"), 
-                         checkboxInput("code2", "Row 1: The Turquoise Territory' painting"), 
-                         checkboxInput("code3","Row 1: Knot Too Shabby' Chair"),
-                         checkboxInput("code4","Row 1: Good Ol' Nostalgic Lamp"),
-                         checkboxInput("code5","Row 1: Periplus Peplum Top"), 
-                         checkboxInput("code6","Row 2: Ferry-tale Loveseat"), 
-                         checkboxInput("code7","Row 2: Bandeu Zipper Skirt"), 
-                         checkboxInput("code8","Row 2: Knotty or Nice Glass Light"),
-                         checkboxInput("code9","Row 2: Sea-nic Circular Window"), 
-                         checkboxInput("code10","Row 3: Holly Night Faux Collar"), 
-                         checkboxInput("code11","Row 3: Knot Too Shabby' Table"), 
-                         checkboxInput("code12","Row 3: An A-door-able Entrance"),
-                         checkboxInput("code13","Row 4: Cresting Waves Hairdo"), 
-                         checkboxInput("code14","Row 4: Tenacious Tuxedo"),
-                         
-                         #checkboxInput("code15","Grand Prize"),
-                         br(),
-                         helpText("Enter how much time is left for you to get the tokens:"),
-                         fluidRow(column(5, numericInput(inputId="day_left_th", 
-                                                         label= "Days left:", 
-                                                         value=duration, 
-                                                         min=0,
-                                                         max = duration,
-                                                         step=1,
-                                                         width = "70px")) ,
-                                  column(5, offset=1, numericInput(inputId="hour_left_th", 
-                                                                   label= "Hours left:", 
-                                                                   value=0, 
-                                                                   min=0,
-                                                                   max=23,
-                                                                   step=1,
-                                                                   width = "70px") )), 
-                         br(),
-                         helpText("Enter how many relics and bunnies you currently have:"),
-                         fluidRow(column(5,
-                                         numericInput(inputId = "relics", 
-                                                      label = "Relics:", 
-                                                      value = 0,
-                                                      min = 0,
-                                                      max = sum(prizes$relic),
-                                                      width = "70px") ),
-                                  
-                                  column(5, offset=1, numericInput(inputId="bunnies", 
-                                                                   label= "Bunnies:", 
-                                                                   value=0, 
-                                                                   min=0,
-                                                                   max= sum(prizes$bunnies),
-                                                                   width = "70px")))#,
-                         #helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
-                         
-                         
-                     ), 
+                     #checkboxInput("code15","Grand Prize"),
+                     br(),
+                     helpText("Enter how much time is left for you to get the tokens:"),
+                     fluidRow(column(5, numericInput(inputId="day_left_th", 
+                                                     label= "Days left:", 
+                                                     value=duration, 
+                                                     min=0,
+                                                     max = duration,
+                                                     step=1,
+                                                     width = "70px")) ,
+                              column(5, offset=1, numericInput(inputId="hour_left_th", 
+                                                               label= "Hours left:", 
+                                                               value=0, 
+                                                               min=0,
+                                                               max=23,
+                                                               step=1,
+                                                               width = "70px") )), 
+                     br(),
+                     helpText("Enter how many relics and bunnies you currently have:"),
+                     fluidRow(column(5,
+                                     numericInput(inputId = "relics", 
+                                                  label = "Relics:", 
+                                                  value = 0,
+                                                  min = 0,
+                                                  max = sum(prizes$relic),
+                                                  width = "70px") ),
+                              
+                              column(5, offset=1, numericInput(inputId="bunnies", 
+                                                               label= "Bunnies:", 
+                                                               value=0, 
+                                                               min=0,
+                                                               max= sum(prizes$bunnies),
+                                                               width = "70px")))#,
+                     #helpText("Note: the maximum value for relics and bunnies is 4680 and 1150 respectively.")
                      
-                     mainPanel(
-                         helpText("The numbers below will change according to your entered information."),
-                         br(),
-                         textOutput("time_passed_th"),
-                         br(),
-                         textOutput("tokens_needed"),
-                         br(),
-                         textOutput("rate"),
-                         br(),
-                         textOutput("walkie_talkies_count"),
-                         br(),
-                         helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
-                         img(src='NYDockAndRoll.png', width=400), 
-                         img(src='NYDockAndRoll2.png', width=400), 
-                         br(),
-                         #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
-                         tagList("Inforgraphic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
-                         br(),
-                         helpText("Resources table for Treasure Hunt to help you to plan ahead:"),
-                         img(src='TH_-_table.png',  width=400), 
-                         br(),
-                         tagList("Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
-                         br(), 
-                         #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
-                         tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
-                     )
+                    # actionButton("submit", "Submit")
+                   ), 
+                   
+                   mainPanel(
+                     helpText("The numbers below will change according to your entered information."),
+                     br(),
+                     textOutput("time_passed_th"),
+                     br(),
+                     textOutput("tokens_needed"),
+                     br(),
+                     textOutput("rate"),
+                     br(),
+                     textOutput("walkie_talkies_count"),
+                     br(),
+                     helpText("Below you can see the pictures of the prizes as well as the pyramid structure of the event."),
+                     img(src='TH_HallwaysReady.png', width=400), 
+                     #img(src='TH_SpringFling2.png', width=400), 
+                     br(),
+                     tagList("Inforgraphic Source:", a("Screenshot from karenkeren's video", href="https://www.youtube.com/watch?v=uT9setmsTTA"),"."),
+                     #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
+                     # tagList("Inforgraphic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
+                     br(),
+                     helpText("Resources table for Treasure Hunt to help you to plan ahead:"),
+                     img(src='TH_-_table.png',  width=400), 
+                     br(),
+                     tagList("Source:", a("simmerdownMAL's Twitter", href="https://twitter.com/simmerdownMAL"),"."),
+                     br(), 
+                     #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
+                     tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
+                   )
                  )
         )  # end of tabPanel
-        
-        
-        
         , 
         
-       
+        
+        
+        
+        
+        
+        
         
         
         # #New Panel: 
@@ -307,7 +370,7 @@ ui <- fluidPage(
                                                                label= "Current Tier:",
                                                                value=1,
                                                                min=0,
-                                                               max = 60,
+                                                               max = 70,
                                                                step=1,
                                                                width = "70px")),
                               column(5,offset=1, numericInput(inputId = "current_prizeticket",
@@ -352,12 +415,19 @@ ui <- fluidPage(
                          br(),
                          #helpText("Remember that you receive 550 prize tickets for completing daily tasks and at least 500 for completing each seasonal task (you get 3 seasonal tasks every 3 days)
                          #         Additional prize tickets can be received by completing the season tasks which are being added every 3 days."),
-                         img(src='Festival_hearty.png', width = 400), 
+                         img(src='SimFestival_JungleRush.png', width = 400), 
+                         img(src='SimFestival_JungleRush_2.png', width = 400), 
+                         img(src='SimFestival_JungleRush_3.png', width = 400), 
+                         
+                         #img(src='SF_SpringFling2.png', width = 400), 
+                         #img(src='SF_SpringFling3.png', width = 400), 
                          br(),
+                         #tagList("Infographic Source:", a("L'Univers Sims' website", href="https://wwww.luniversims.com"),"."),
                          #tagList("Infographic Source:", a("SimmerdownMal's Twitter", href="https://twitter.com/simmerdownMAL/"),"."),
                          tagList("Infographic Source:", a("Salixcat's website", href="https://www.salixcat.com"),"."),
+                         #tagList("Infographic Source:", a("TheGirlWhoGames Blog", href="https://thegirlwhogames.blog/2022/05/13/the-sims-mobile-briny-nights-update/"),"."),
                          br(),
-                         tagList("Huge THANKS to ", a("Game Changer SimmerdownMAL", href="https://twitter.com/simmerdownMAL")," for the provided numbers of prize tickets for the tiers."),
+                         tagList("Huge THANKS to ", a("SimmerdownMAL", href="https://twitter.com/simmerdownMAL")," for the provided numbers of prize tickets for the tiers."),
                          br(),
                          #helpText("This app was created by Yani. If you have any questions or comments, you can contact me on Twitter: "),
                          tagList("This app was created by Yani. If you have any questions or comments, you can find me on ", a("Twitter", href="https://twitter.com/yani_tsm"),", ", a("Reddit", href="https://www.reddit.com/r/SimsMobile/"), "or most of the Sims Mobile Discord servers. Any feedback is appreciated.")
@@ -381,9 +451,26 @@ ui <- fluidPage(
 
 
 
-# Define server logic:
-server <- function(input, output) {
-    
+# Shiny App server logic: ----
+server <- function(input, output, session) {
+  # Whenever a field is filled, aggregate all form data
+  formData <- reactive({
+    data <- sapply(fields, function(x) input[[x]])
+    data
+  })
+  
+  # When the Submit button is clicked, save the form data
+  observeEvent(input$submit, {
+    saveData(formData())
+  })
+  
+  # Show the previous responses
+  # (update with current response when Submit is clicked)
+  output$responses <- DT::renderDataTable({
+    input$load
+    loadData()
+  })
+
     output$time_passed_sts <- renderText({
         time_left <- input$day_left_sts + input$hour_left_sts/24
         prop_left <- round(time_left/duration *100, 2)
@@ -524,5 +611,5 @@ server <- function(input, output) {
     })
 }
 
-# Run the application 
+# Run the application ----
 shinyApp(ui = ui, server = server)
